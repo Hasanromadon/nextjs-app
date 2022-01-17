@@ -1,6 +1,6 @@
 function Title ({children}){
     return(
-        <h1 className='text-2xl'>{children}</h1>
+        <h1 className='text-2xl mb-4'>{children}</h1>
     )
 }
 

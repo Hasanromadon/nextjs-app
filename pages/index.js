@@ -1,10 +1,11 @@
 import Head from 'next/head';
-import Link from 'next/link';
+import ProductCard from '../components/productCard';
 import Title from '../components/Title';
 import { getProducts } from '../lib/products';
-
+import Page from '../components/page';
 export async function getStaticProps(){
   // menggunakan strategy get Static Props yang direvalidate
+  console.log(parseInt(process.env.REVALIDATE_SECONDS));
   try {
     const products = await getProducts();
     console.log(products);
@@ -21,23 +22,14 @@ export async function getStaticProps(){
 
 export default function HomePage({products}) {
   return (
-    <>
-      <Head>
-        <title>Next Shop</title>
-      </Head>
-      <main className='px-6 py-4'>
-       <Title>Home Page</Title>
-       <ul>
+    <Page title='Homepage'>
+       <ul className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
          {products.map(product => (
            <li key={product.id}>
-           <Link href={`products/${product.id}`}>
-                <a >{product.title}</a>
-           </Link>
+             <ProductCard product={product}/>
            </li>
          ))}
        </ul>
-      </main>
-    </>
-
+      </Page>
   )
 }
