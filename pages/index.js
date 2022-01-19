@@ -5,10 +5,8 @@ import { getProducts } from '../lib/products';
 import Page from '../components/page';
 export async function getStaticProps(){
   // menggunakan strategy get Static Props yang direvalidate
-  console.log(parseInt(process.env.REVALIDATE_SECONDS));
   try {
     const products = await getProducts();
-    console.log(products);
     return {
       props: {products},
       revalidate: parseInt(process.env.REVALIDATE_SECONDS), 

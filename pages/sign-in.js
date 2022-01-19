@@ -3,32 +3,24 @@ import Page from '../components/page';
 import Input from '../components/input';
 import Field from '../components/Field';
 import Button from '../components/Button';
-import { fetchJson } from '../lib/api';
+import { useRouter } from 'next/router';
+import { useSignIn} from '../hooks/users';
+
 export default function SignInPage(){
 
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword]  = useState('');
-    const [status, setStatus] = useState({loading: false, error: false});
+    const {signIn, signInError, signInLoading} = useSignIn();
 
     const handleSubmit = async (e) => {
-        try {
-            e.preventDefault();
-            setStatus({loading: true, error: false});
-            console.log(JSON.stringify({indetifier: email, password}));
-     
-             const response = await fetchJson('http://localhost:1337/auth/local', {
-                 method: 'POST',
-                 headers: {'Content-Type': 'application/json'},
-                 body: JSON.stringify({identifier: email, password})
-             });
-             setStatus({loading: false, error: false});
-        }catch(error){
-            setStatus({loading: false, error: true});
+        e.preventDefault();
+        const valid = await signIn(email, password);
+        if(valid) {
+            router.push('/');
         }
-
-    }
-
-
+    };
+    
     return ( 
         <Page title='Sign page'>
             <form onSubmit={handleSubmit}>
@@ -38,8 +30,8 @@ export default function SignInPage(){
                 <Field label='Password'>
                     <Input type='password' value={password} onChange={(event)=> setPassword(event.target.value)} />
                 </Field>
-                {status.error && <p className='text-red-700 text-sm'>Invalid credential</p>}
-                {status.loading ? <p>Loading...</p> : <Button>Sign in</Button>}
+                {signInError && <p className='text-red-700 text-sm'>Invalid credential</p>}
+                {signInLoading ? <p>Loading...</p> : <Button>Sign in</Button>}
                 
             </form>
         </Page>

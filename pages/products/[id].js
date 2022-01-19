@@ -1,7 +1,5 @@
 import { ApiError } from '../../lib/api';
-import Head from 'next/head';
 import Image from 'next/image';
-import Title from '../../components/Title';
 import { getProduct, getProducts } from '../../lib/products';
 import Page from '../../components/page';
 
